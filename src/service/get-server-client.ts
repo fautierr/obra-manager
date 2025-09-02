@@ -16,6 +16,7 @@ export async function getServerClient<T>({
     const cookieStore = await cookies()
 
     // Convertir todas las cookies a un solo string
+    console.log(cookieStore)
     const cookieHeader = cookieStore
       .getAll()
       .map(({ name, value }) => `${name}=${value}`)
