@@ -16,3 +16,4 @@ export { default as CreateProjectForm } from './projects/create/create-project-f
 export { default as ProjectsCalculate } from './projects/calculate-materials/projects-calculate'
 export { default as ContainerProjectDetail } from './projects/details/container-project-detail'
 export { default as CardInfo } from './common/card-info'
+export { default as HistoryAndComments } from './projects/details/history-and-comments'

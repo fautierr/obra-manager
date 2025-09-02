@@ -32,12 +32,6 @@ const SaveChanges = () => {
               Guardar cambios
             </CustomButton>
           </div>
-          {/* <MainHeader>
-          <Typography variant='h1'>Detalles del proyecto</Typography>
-        </MainHeader>
-        <CustomButton variant='solid' color='primary' type='submit'>
-          Guardar cambios
-        </CustomButton> */}
         </CardBody>
       </Card>
     </Form>
