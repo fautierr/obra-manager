@@ -1,8 +1,7 @@
-import { CreateProjectForm } from '@/features'
 import React from 'react'
 
 const CreateProjectPage = () => {
-  return <CreateProjectForm />
+  return <div>jakjakaj</div>
 }
 
 export default CreateProjectPage
