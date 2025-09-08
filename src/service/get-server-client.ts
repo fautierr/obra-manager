@@ -12,11 +12,9 @@ export async function getServerClient<T>({
   variables,
 }: GraphQLRequestParams): Promise<T> {
   try {
-    // 👇 await acá
     const cookieStore = await cookies()
 
-    // Convertir todas las cookies a un solo string
-    console.log(cookieStore)
+    // console.log(cookieStore)
     const cookieHeader = cookieStore
       .getAll()
       .map(({ name, value }) => `${name}=${value}`)
