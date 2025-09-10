@@ -2,13 +2,15 @@
 
 // import { Button } from '@heroui/button'
 import SelectProject from './select-project'
-import { StepTransition } from './step-transition'
+import { StepTransition } from '@/features/common/step-transition'
 // import { useProjectFlow } from './use-project-flow'
 import CreateProjectFromScratch from './create-project-from-scratch'
 // import { usePersistedState } from './use-persisted-state'
 // import { useState } from 'react'
 import { useProjectStore } from '../use-project-store'
 import { Button } from '@heroui/button'
+import { useProjectCategoriesStore } from '@/features/categories/use-categories-store'
+import { useProjectMaterialsStore } from '@/features/materials/use-materials-store'
 
 // ----------------------
 // Componentes finales
@@ -58,6 +60,9 @@ const CreateProjectFlow: React.FC<CreateProjectFlowProps> = ({
     setShowOptions,
     reset,
   } = useProjectStore()
+  const { resetCategories: resetProjectCategories } =
+    useProjectCategoriesStore()
+  const { resetMaterials: resetProjectMaterials } = useProjectMaterialsStore()
   if (showOptions)
     return (
       <StepTransition stepKey='options'>
@@ -66,7 +71,11 @@ const CreateProjectFlow: React.FC<CreateProjectFlowProps> = ({
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
           setShowOptions={setShowOptions}
-          reset={reset}
+          reset={() => {
+            reset()
+            resetProjectCategories()
+            resetProjectMaterials()
+          }}
         />
       </StepTransition>
     )

@@ -18,3 +18,4 @@ export { default as ContainerProjectDetail } from './projects/details/container-
 export { default as CardInfo } from './common/card-info'
 export { default as HistoryAndComments } from './projects/details/history-and-comments'
 export { default as StartOnboarding } from './onboarding/start-onboarding'
+export { default as FlowCalculations } from './calculate-materials/flow-calculations'
