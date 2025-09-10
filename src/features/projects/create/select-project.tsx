@@ -15,7 +15,7 @@ const SelectProject = ({
   setShowOptions: (val: boolean) => void
   reset: () => void
 }) => {
-  const projectCreationOptions = useProjectOptions(0)
+  const projectCreationOptions = useProjectOptions(1)
 
   return (
     <Grid container gap={4}>

@@ -3,7 +3,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-type ProjectState = {
+type CalcMaterialsState = {
   // flujo general
   selectedOption: number | null
   showOptions: boolean
@@ -11,18 +11,14 @@ type ProjectState = {
   setShowOptions: (val: boolean) => void
 
   // create from scratch
-  step: 'project-data' | 'categories' | 'materials'
-  projectName: string
-  projectDescription: string
-  setStep: (step: 'project-data' | 'categories' | 'materials') => void
-  setProjectName: (name: string) => void
-  setProjectDescription: (desc: string) => void
+  step: 'categories' | 'materials'
+  setStep: (step: 'categories' | 'materials') => void
 
   // reset global
   reset: () => void
 }
 
-export const useProjectStore = create<ProjectState>()(
+export const useCalculateFlowStore = create<CalcMaterialsState>()(
   persist(
     (set) => ({
       // flujo general
@@ -32,23 +28,17 @@ export const useProjectStore = create<ProjectState>()(
       setShowOptions: (val) => set({ showOptions: val }),
 
       // create from scratch
-      step: 'project-data',
-      projectName: '',
-      projectDescription: '',
+      step: 'categories',
       setStep: (step) => set({ step }),
-      setProjectName: (name) => set({ projectName: name }),
-      setProjectDescription: (desc) => set({ projectDescription: desc }),
 
       // reset general
       reset: () =>
         set({
-          step: 'project-data',
-          projectName: '',
-          projectDescription: '',
+          step: 'categories',
         }),
     }),
     {
-      name: 'project-store',
+      name: 'calc-materials-store',
     },
   ),
 )
