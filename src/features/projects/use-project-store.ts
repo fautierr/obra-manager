@@ -12,11 +12,7 @@ type ProjectState = {
 
   // create from scratch
   step: 'project-data' | 'categories' | 'materials'
-  projectName: string
-  projectDescription: string
   setStep: (step: 'project-data' | 'categories' | 'materials') => void
-  setProjectName: (name: string) => void
-  setProjectDescription: (desc: string) => void
 
   // reset global
   reset: () => void
@@ -33,18 +29,12 @@ export const useProjectStore = create<ProjectState>()(
 
       // create from scratch
       step: 'project-data',
-      projectName: '',
-      projectDescription: '',
       setStep: (step) => set({ step }),
-      setProjectName: (name) => set({ projectName: name }),
-      setProjectDescription: (desc) => set({ projectDescription: desc }),
 
       // reset general
       reset: () =>
         set({
           step: 'project-data',
-          projectName: '',
-          projectDescription: '',
         }),
     }),
     {
