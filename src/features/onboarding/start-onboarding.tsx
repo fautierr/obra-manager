@@ -1,20 +1,11 @@
-import React from 'react'
-import LayoutContainer from '../common/layout-container'
-// import { MainHeader } from '../common/main-header'
-// import { Typography } from '../common/typography'
-import CreateProjectFlow from '../projects/create/create-project-flow'
-import StepsHeader from '../common/steps-header'
+import LayoutContainer from '@/features/common/layout-container'
+import FlowToCreateProject from '@/features/projects/create/flow-to-create-project'
+import StepsHeader from '@/features/common/steps-header'
 
 const StartOnboarding = () => {
   return (
     <LayoutContainer>
-      {/* <MainHeader className='flex flex-col items-center pb-12'>
-        <Typography variant='h1'>¡Comencemos!</Typography>
-        <Typography variant='p'>
-          Elegi un proyecto, luego podrás actualizar sus datos si asi lo deseas.
-        </Typography>
-      </MainHeader> */}
-      <CreateProjectFlow
+      <FlowToCreateProject
         optionsTitle={
           <StepsHeader
             title='¡Comencemos!'
@@ -22,9 +13,13 @@ const StartOnboarding = () => {
               deseas.'
           />
         }
+        // useFlowStore={useOnboardingStore}
+        // useCategoriesStore={useOnboardingCategoriesStore}
+        // useMaterialsStore={useOnboardingMaterialsStore}
+        // useGeneralDataStore={useOnboardingGeneralDataStore}
       />
     </LayoutContainer>
   )
 }
-
+// https://chatgpt.com/s/t_68c1fca4f02881919da85b5f50fe4094
 export default StartOnboarding

@@ -11,6 +11,7 @@ import { useProjectStore } from '../use-project-store'
 import { Button } from '@heroui/button'
 import { useProjectCategoriesStore } from '@/features/categories/use-categories-store'
 import { useProjectMaterialsStore } from '@/features/materials/use-materials-store'
+import { useProjectGeneralDataStore } from '../use-project-general-data-store'
 
 // ----------------------
 // Componentes finales
@@ -19,7 +20,6 @@ const ProjectForm = () => <p>Formulario de proyecto (estructura básica)</p>
 const ProjectPreview = () => (
   <p>Previsualización del proyecto (estructura básica)</p>
 )
-// const ProjectSummary = () => <p>Resumen del proyecto (estructura básica)</p>
 const ProjectDuplicate = () => {
   const { setShowOptions } = useProjectStore()
   return (
@@ -48,11 +48,9 @@ const componentsMap: Record<number, React.FC> = {
 interface CreateProjectFlowProps {
   optionsTitle?: React.ReactNode
 }
-const CreateProjectFlow: React.FC<CreateProjectFlowProps> = ({
+const FlowToCreateProject: React.FC<CreateProjectFlowProps> = ({
   optionsTitle,
 }) => {
-  // const [selectedOption, setSelectedOption] = useState<number | null>(null)
-  // const [showOptions, setShowOptions] = useState(true)
   const {
     selectedOption,
     showOptions,
@@ -60,6 +58,8 @@ const CreateProjectFlow: React.FC<CreateProjectFlowProps> = ({
     setShowOptions,
     reset,
   } = useProjectStore()
+
+  const { reset: resetGeneralData } = useProjectGeneralDataStore()
   const { resetCategories: resetProjectCategories } =
     useProjectCategoriesStore()
   const { resetMaterials: resetProjectMaterials } = useProjectMaterialsStore()
@@ -73,6 +73,7 @@ const CreateProjectFlow: React.FC<CreateProjectFlowProps> = ({
           setShowOptions={setShowOptions}
           reset={() => {
             reset()
+            resetGeneralData()
             resetProjectCategories()
             resetProjectMaterials()
           }}
@@ -92,4 +93,4 @@ const CreateProjectFlow: React.FC<CreateProjectFlowProps> = ({
   )
 }
 
-export default CreateProjectFlow
+export default FlowToCreateProject
