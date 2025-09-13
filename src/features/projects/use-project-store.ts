@@ -2,43 +2,48 @@
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { ProjectStepKey } from '../onboarding/onboarding-flow.config'
 
-type ProjectState = {
-  // flujo general
+export type ProjectState = {
   selectedOption: number | null
   showOptions: boolean
+  step: ProjectStepKey | null
   setSelectedOption: (val: number | null) => void
   setShowOptions: (val: boolean) => void
-
-  // create from scratch
-  step: 'project-data' | 'categories' | 'materials'
-  setStep: (step: 'project-data' | 'categories' | 'materials') => void
-
-  // reset global
-  reset: () => void
+  setStep: (step: ProjectStepKey | null) => void
+  reset: () => void // parcial
+  resetAll: () => void // completo
 }
 
-export const useProjectStore = create<ProjectState>()(
-  persist(
-    (set) => ({
-      // flujo general
-      selectedOption: null,
-      showOptions: true,
-      setSelectedOption: (val) => set({ selectedOption: val }),
-      setShowOptions: (val) => set({ showOptions: val }),
+const createProjectStore = (key: string) =>
+  create<ProjectState>()(
+    persist(
+      (set) => ({
+        selectedOption: null,
+        showOptions: true,
+        step: null,
+        setSelectedOption: (val) => set({ selectedOption: val }),
+        setShowOptions: (val) => set({ showOptions: val }),
+        setStep: (step) => set({ step }),
+        // reset parcial: mantiene selectedOption
+        reset: () =>
+          set({
+            showOptions: true,
+            step: null,
+          }),
+        // reset completo: resetea todo
+        resetAll: () =>
+          set({
+            selectedOption: null,
+            showOptions: true,
+            step: null,
+          }),
+      }),
+      {
+        name: `${key}-project-store`,
+      },
+    ),
+  )
 
-      // create from scratch
-      step: 'project-data',
-      setStep: (step) => set({ step }),
-
-      // reset general
-      reset: () =>
-        set({
-          step: 'project-data',
-        }),
-    }),
-    {
-      name: 'project-store',
-    },
-  ),
-)
+export const useProjectStore = createProjectStore('project')
+export const useOnboardingStore = createProjectStore('onboarding')
