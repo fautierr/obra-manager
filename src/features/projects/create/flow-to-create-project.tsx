@@ -1,93 +1,97 @@
 'use client'
 
-// import { Button } from '@heroui/button'
-import SelectProject from './select-project'
 import { StepTransition } from '@/features/common/step-transition'
-// import { useProjectFlow } from './use-project-flow'
-import CreateProjectFromScratch from './create-project-from-scratch'
-// import { usePersistedState } from './use-persisted-state'
-// import { useState } from 'react'
-import { useProjectStore } from '../use-project-store'
 import { Button } from '@heroui/button'
-import { useProjectCategoriesStore } from '@/features/categories/use-categories-store'
-import { useProjectMaterialsStore } from '@/features/materials/use-materials-store'
-import { useProjectGeneralDataStore } from '../use-project-general-data-store'
+import SelectProject from './select-project'
+import { ProjectState } from '@/features/projects/use-project-store'
 
-// ----------------------
-// Componentes finales
-// ----------------------
-const ProjectForm = () => <p>Formulario de proyecto (estructura básica)</p>
-const ProjectPreview = () => (
-  <p>Previsualización del proyecto (estructura básica)</p>
-)
-const ProjectDuplicate = () => {
-  const { setShowOptions } = useProjectStore()
-  return (
-    <>
-      <p>Duplicar proyecto (estructura básica)</p>
-      <Button
-        color='secondary'
-        variant='flat'
-        onPress={() => {
-          setShowOptions(true)
-        }}
-      >
-        Volver a los datos
-      </Button>
-    </>
-  )
-}
-
-const componentsMap: Record<number, React.FC> = {
-  1: ProjectForm,
-  2: ProjectPreview,
-  3: CreateProjectFromScratch,
-  4: ProjectDuplicate,
-}
+import StepsHeader from '@/features/common/steps-header'
+import {
+  onboardingFlow,
+  ProjectStepKey,
+} from '@/features/onboarding/onboarding-flow.config'
+import { buttonConfig } from '../button-ui.config'
 
 interface CreateProjectFlowProps {
   optionsTitle?: React.ReactNode
+  store: ProjectState
+  resetAll: () => void
 }
+
 const FlowToCreateProject: React.FC<CreateProjectFlowProps> = ({
   optionsTitle,
+  store,
+  resetAll,
 }) => {
   const {
     selectedOption,
     showOptions,
+    step,
     setSelectedOption,
     setShowOptions,
+    setStep,
     reset,
-  } = useProjectStore()
+  } = store
 
-  const { reset: resetGeneralData } = useProjectGeneralDataStore()
-  const { resetCategories: resetProjectCategories } =
-    useProjectCategoriesStore()
-  const { resetMaterials: resetProjectMaterials } = useProjectMaterialsStore()
-  if (showOptions)
+  if (showOptions) {
     return (
       <StepTransition stepKey='options'>
         {optionsTitle}
         <SelectProject
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
+          setStep={setStep}
           setShowOptions={setShowOptions}
-          reset={() => {
-            reset()
-            resetGeneralData()
-            resetProjectCategories()
-            resetProjectMaterials()
-          }}
+          reset={resetAll}
         />
       </StepTransition>
     )
+  }
 
-  // Renderizamos el componente correspondiente
-  const SelectedComponent =
-    selectedOption !== null ? componentsMap[selectedOption] : null
+  // Obtenemos la opción seleccionada
+  const option = onboardingFlow.find((o) => o.id === selectedOption)
+  if (!option) return <p>No se encontró la opción</p>
+
+  // Obtenemos el paso actual
+  const currentStep = option.steps.find((s) => s.key === step)
+  if (!currentStep) return <p>No se encontró el paso</p>
+
   return (
-    <StepTransition stepKey={`detail-${selectedOption}`}>
-      <div className='mt-4'>
-        {SelectedComponent ? <SelectedComponent /> : <p>Elegí una opción</p>}
+    <StepTransition stepKey={currentStep.key}>
+      <StepsHeader title={currentStep.title} subtitle={currentStep.subtitle} />
+      <div className='mt-4'>{currentStep.component}</div>
+
+      <div className='pt-4 flex flex-col sm:flex-row justify-end gap-4'>
+        {currentStep.buttons.map((btn) => {
+          const { color, variant } = buttonConfig[btn.action] ?? {
+            color: 'secondary',
+            variant: 'solid',
+          }
+          return (
+            <Button
+              key={btn.label}
+              color={color}
+              variant={variant}
+              onPress={() => {
+                switch (btn.action) {
+                  case 'next':
+                  case 'prev':
+                    if (btn.step) setStep(btn.step as ProjectStepKey)
+                    break
+                  case 'backToOptions':
+                    reset()
+                    break
+                  case 'create':
+                    console.log('🚀 Crear proyecto con datos del store')
+                    reset()
+                    break
+                }
+              }}
+            >
+              {btn.label}
+            </Button>
+          )
+        })}
       </div>
     </StepTransition>
   )
